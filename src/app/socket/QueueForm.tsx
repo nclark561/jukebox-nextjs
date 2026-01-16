@@ -69,28 +69,37 @@ export default function QueueForm({
   };
 
   return (
-    <div className="fixed top-0 left-0 w-[100vw] h-[100vh] flex justify-center items-center backdrop-blur-md">
+    <div className="fixed top-0 left-0 w-[100vw] h-[100vh] flex justify-center items-center backdrop-blur-md bg-black/40 animate-fadeIn z-50">
       <form
-        className="flex flex-col relative p-4 bg-gray-600"
+        className="flex flex-col relative p-8 bg-gradient-to-br from-gray-800 via-gray-900 to-black rounded-2xl shadow-2xl border border-gray-700 min-w-[350px] animate-slideUp"
         onSubmit={(e) => {
           e.preventDefault();
           handleSumbit(queueForm);
         }}
       >
+        <h2 className="text-2xl font-bold mb-6 text-white bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+          {queueForm} Queue
+        </h2>
         <input
-          className="mt-[15px] text-black"
+          className="px-4 py-3 text-white bg-gray-800/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 placeholder-gray-400"
           name="room-name"
-          placeholder="Queue Name"
+          placeholder="Enter Queue Name"
           onChange={(e) => setRoomInput(e.target.value)}
           value={roomInput}
         ></input>
-        <button type="submit">{`${queueForm} Queue`}</button>
-        <p
-          className="absolute top-[7px] right-[15px] text-lg cursor-pointer"
+        <button 
+          type="submit" 
+          className="mt-6 px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-lg shadow-lg hover:shadow-purple-500/50 hover:scale-105 active:scale-95 transition-all duration-300 hover:from-purple-600 hover:to-pink-600"
+        >
+          {`${queueForm} Queue`}
+        </button>
+        <button
+          type="button"
+          className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-gray-400 hover:text-white hover:bg-gray-700 rounded-full transition-all duration-200 hover:rotate-90"
           onClick={() => setQueueForm("")}
         >
-          X
-        </p>
+          ✕
+        </button>
       </form>
     </div>
   );

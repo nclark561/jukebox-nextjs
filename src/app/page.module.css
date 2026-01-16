@@ -197,24 +197,30 @@
     margin: 10px;
     align-items: center;
     justify-content: space-evenly;
-    padding: 5px;
+    padding: 12px;
     transition: all .3s ease-in-out;
     opacity: 1;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 .flexClear {
     display: flex;
     margin: 10px;
     align-items: center;
     justify-content: space-evenly;
-    padding: 5px;
+    padding: 12px;
     transition: all .3s ease-in-out;
     opacity: .99;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .flex:hover {
-    background-color: rgb(160, 160, 160);
-    border-radius: 10px;
-
+    background-color: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
 }
 
 .hidden {

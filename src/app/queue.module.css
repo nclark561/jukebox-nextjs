@@ -2,7 +2,7 @@
     width: 40%;
     min-height: 88vh;
     height: 88vh;
-    background-color: gray;
+    background-color: rgb(18, 18, 18);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -59,29 +59,31 @@
     padding: 8px;
 }
 .queueContainer{    
-    width: 100%;        
-    margin-top: 20px;
-    height: 420px;
+    width: 100%;
+    flex: 1;
     overflow-y: auto;
+    padding: 10px;
 }
 
 .linkContainer{
     width: 90%;
-    height: 130px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
+    gap: 5px;
+    padding-top: 20px;
 }
 .input{
-    width: 300px;
-    height: 50px;
-    padding-left: 30px;
-    font-size: 15px;
+    width: 90%;
+    max-width: 400px;
+    height: 45px;
+    padding-left: 20px;
+    font-size: 14px;
     color: rgb(232, 231, 231);
-    background-color: white;
-    outline: 1px solid rgb(250, 250, 250);
+    outline: 1px solid rgba(250, 250, 250, 0.2);
     background-color: rgb(36,36,36);
-    border-radius: 30px;
+    border-radius: 25px;
+    margin: 15px 0;
 }
 .link{
     display: flex;    

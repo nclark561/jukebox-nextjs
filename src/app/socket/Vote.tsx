@@ -2,7 +2,7 @@
 import styles from "../queue.module.css";
 import SongDisplay from "./songDisplay";
 import { useSession } from "next-auth/react";
-import { useAutoAnimate } from '@formkit/auto-animate/react'
+import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import { useEffect, useState } from "react";
 import QueueForm from "./QueueForm";
 
@@ -18,15 +18,25 @@ interface VoteProps {
   setQueue: React.Dispatch<React.SetStateAction<QueueTrack[]>>;
   queueRoom: string
   setQueueRoom: React.Dispatch<React.SetStateAction<string>>
+  searchQuery: string
 }
 
 export default function Vote(props: VoteProps) {
-  const { socket, queue, setQueue, queueRoom, setQueueRoom } = props;
+  const { socket, queue, setQueue, queueRoom, setQueueRoom, searchQuery } = props;
   const session = useSession();
-  const [animationParent] = useAutoAnimate()
   const [animationToggle, setAnimation] = useState<boolean>(false)
   const [isHost, setIsHost] = useState(false)
   const [queueForm, setQueueForm] = useState("")
+
+  // Filter queue based on search query
+  const filteredQueue = queue.filter((song) => {
+    if (!searchQuery) return true;
+    const searchLower = searchQuery.toLowerCase();
+    return (
+      song.name.toLowerCase().includes(searchLower) ||
+      song.artists?.some(artist => artist.name.toLowerCase().includes(searchLower))
+    );
+  });
 
   useEffect(() => {
     let room = localStorage.getItem("room")
@@ -49,19 +59,23 @@ export default function Vote(props: VoteProps) {
       }}
     >
 
-      <div className={styles.queueContainer}>
-        {queueRoom ? queue.map((song) => (
-          <SongDisplay
-            key={song.id}
-            song={song}
-            socket={socket}
-            setQueue={setQueue}
-            queueRoom={queueRoom}
-          />
-        )) : (
-          <h2 style={{fontSize:"30px"}} className="text-center">Not Currently in a queue!</h2>
-        )}
-      </div>
+      <LayoutGroup>
+        <div className={styles.queueContainer}>
+          <AnimatePresence initial={false}>
+            {queueRoom ? filteredQueue.map((song) => (
+              <SongDisplay
+                key={song.id}
+                song={song}
+                socket={socket}
+                setQueue={setQueue}
+                queueRoom={queueRoom}
+              />
+            )) : (
+              <h2 style={{fontSize:"30px"}} className="text-center">Not Currently in a queue!</h2>
+            )}
+          </AnimatePresence>
+        </div>
+      </LayoutGroup>
       <div style={{ display: "flex", justifyContent: "space-evenly" }}>
         <button
           disabled={queueRoom}

@@ -24,14 +24,6 @@ const scopes = [
   "user-read-currently-playing",
 ].join(",");
 
-const params = {
-  scope: scopes,
-};
-
-const queryParamString = new URLSearchParams(params);
-const LOGIN_URL =
-  `https://accounts.spotify.com/authorize?` + queryParamString.toString();
-
 async function refreshAccessToken(token: any) {
   try {
     const url =
@@ -78,7 +70,11 @@ export const authOptions = {
     SpotifyProvider({
       clientId,
       clientSecret,
-      authorization: LOGIN_URL,
+      authorization: {
+        params: {
+          scope: scopes,
+        },
+      },
     }),
   ],
   secret,

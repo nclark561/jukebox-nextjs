@@ -18,8 +18,9 @@ interface QueueProps {
 export default function Queue(props: QueueProps) {
   const session: any = useSession()
   const [queueRoom, setQueueRoom] = useState("")
+  const [searchQuery, setSearchQuery] = useState("")
   
-  const { socket, setQueue } = props 
+  const { socket, setQueue } = props
 
   socket.on("queue-sent", ({ queue }: { queue: QueueTrack[] }) => {
     setQueue(queue)
@@ -52,10 +53,16 @@ export default function Queue(props: QueueProps) {
           }} className={styles.link}>Search</div>
         </div>
       </div>
-      <input className={styles.input} type="text" name="" id="" />
-      <div style={{ width: "100%" }}>
-        <Vote queueRoom={queueRoom} setQueueRoom={setQueueRoom} socket={props.socket} setQueue={props.setQueue} queue={props.queue} />
-      </div>      
+      <input 
+        className={styles.input} 
+        type="text" 
+        placeholder="Search queued songs..." 
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
+      <div style={{ width: "100%", flex: 1, display: "flex", flexDirection: "column", minHeight: 0 }}>
+        <Vote searchQuery={searchQuery} queueRoom={queueRoom} setQueueRoom={setQueueRoom} socket={props.socket} setQueue={props.setQueue} queue={props.queue} />
+      </div>
     </div>
   );
 }

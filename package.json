@@ -16,6 +16,7 @@
     "@spotify/web-api-ts-sdk": "^1.1.2",
     "dotenv": "^16.3.1",
     "epic-spinners": "^2.0.0",
+    "framer-motion": "^12.26.2",
     "next": "latest",
     "next-auth": "^4.23.2",
     "nodemon": "^3.0.1",

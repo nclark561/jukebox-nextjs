@@ -97,7 +97,7 @@ export default function Home() {
                   }
                 );
                 const images = await response.json();
-                resolve(images[0].url);
+                resolve(images[0]?.url || '');
               } catch (err) {
                 reject(err);
               }
