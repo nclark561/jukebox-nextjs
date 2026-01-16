@@ -92,13 +92,11 @@ export default function Remote({ session, socket, setQueue, queue }: RemoteProps
 console.log(queue, "this is good infgo")
   return (
     <div className={styles.playContainer}>
-      <div style={{ display: "flex", width: "35%", justifyContent: "flex-start" }}>
-        {/* display create a queue when queue doesnt exist  */}
-        {/* {queue?.length > 1? <>kale</> : <>Create A Queue</>} */}
+      <div style={{ display: "flex", flex: "1", minWidth: "180px", maxWidth: "30%", alignItems: "center", gap: "12px" }}>
         {current && (
           <>
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "20%" }}>
-              <Image src={`${current?.album?.images[0]?.url}`} alt="current-song" width={50} height={50}></Image>
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+              <Image src={`${current?.album?.images[0]?.url}`} alt="current-song" width={56} height={56} style={{ borderRadius: "4px" }}></Image>
             </div>
             <div className={styles.center}>
               <div className={styles.songTitleSmall}>{current?.name}</div>
@@ -107,9 +105,9 @@ console.log(queue, "this is good infgo")
           </>
         )}
       </div>
-      <div className={styles.column}>
-        <div style={{ display: "flex", justifyContent: "space-evenly", width: "250px" }}>
-          <Image src={"/leftArrow.png"} style={{ opacity: ".3" }} alt={"left arrow"} height={50} width={50} />
+      <div className={styles.column} style={{ flex: "1", maxWidth: "722px" }}>
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "16px", marginBottom: "8px" }}>
+          <Image src={"/leftArrow.png"} style={{ opacity: ".5", cursor: "pointer" }} alt={"left arrow"} height={32} width={32} />
           {play ? (
             <Image
               onClick={() => {
@@ -123,8 +121,9 @@ console.log(queue, "this is good infgo")
               }}
               src={"/play.png"}
               alt={"play button"}
-              height={50}
-              width={50}
+              height={32}
+              width={32}
+              style={{ cursor: "pointer" }}
             />
           ) : (
             <Image
@@ -139,8 +138,9 @@ console.log(queue, "this is good infgo")
                   })
                 }
               }}
-              height={50}
-              width={50}
+              height={32}
+              width={32}
+              style={{ cursor: "pointer" }}
             ></Image>
           )}
           <Image
@@ -154,18 +154,19 @@ console.log(queue, "this is good infgo")
                 })
               }
             }}
-            height={50}
-            width={50}
+            height={32}
+            width={32}
+            style={{ cursor: "pointer" }}
           />
         </div>
-        <div style={{ marginTop: "10px" }} className="w-80 bg-gray-200 rounded-full h-1 mb-4 dark:bg-gray-700">
-          <div className="bg-blue-600 h-1 rounded-full dark:bg-blue-500" style={{ width: `${percent}%` }}></div>
+        <div style={{ width: "100%", maxWidth: "600px" }} className="bg-gray-200 rounded-full h-1 dark:bg-gray-700">
+          <div className="bg-white h-1 rounded-full" style={{ width: `${percent}%` }}></div>
         </div>
       </div>
-      <div style={{ width: "450px" }}>
-        <div className="flex flex-col items-center justify-center mt-[5px]">
-          <p>Powered By</p>
-          <Image src={"/Spotify_Logo_RGB_Green.png"} width={120} height={50} alt="spotify-logo"/>
+      <div style={{ flex: "1", minWidth: "180px", maxWidth: "30%", display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
+        <div className="flex flex-col items-center justify-center">
+          <p style={{ fontSize: "11px", color: "#b3b3b3", marginBottom: "4px" }}>Powered By</p>
+          <Image src={"/Spotify_Logo_RGB_Green.png"} width={80} height={24} alt="spotify-logo"/>
         </div>
       </div>
     </div>

@@ -1,7 +1,5 @@
 .main {
-    background-color: rgb(18, 18, 18);
-    min-height: 100vh;
-    height: fit-content;
+    background-color: #000000;
     color: white;
     flex-direction: column;
     overflow: hidden;
@@ -128,6 +126,156 @@
     background-color: gray;
     border-radius: 15px;
     padding: 8px;
+}
+
+.topBar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 32px;
+    gap: 16px;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1ed760;
+    letter-spacing: -0.5px;
+    white-space: nowrap;
+}
+
+.searchBar {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    max-width: 600px;
+    background-color: rgb(36, 36, 36);
+    border-radius: 500px;
+    padding: 12px 16px;
+    gap: 12px;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+}
+
+.searchBar:focus-within {
+    background-color: rgb(45, 45, 45);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.searchIcon {
+    cursor: pointer;
+    opacity: 0.7;
+}
+
+.searchBarInput {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.searchBarInput::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.userMenu {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.dropdown {
+    position: relative;
+}
+
+.userButton {
+    background-color: rgba(0, 0, 0, 0.7);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+    padding: 0;
+    overflow: hidden;
+}
+
+.userButton:hover {
+    transform: scale(1.05);
+}
+
+.profilePic {
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profileIcon {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #535353;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.dropdownMenu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background-color: #282828;
+    border-radius: 4px;
+    min-width: 160px;
+    box-shadow: 0 16px 24px rgba(0, 0, 0, 0.3), 0 6px 8px rgba(0, 0, 0, 0.2);
+    padding: 4px;
+    z-index: 1000;
+}
+
+.dropdownItem {
+    width: 100%;
+    padding: 12px 16px;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.9);
+    text-align: left;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 2px;
+    transition: background-color 0.1s;
+}
+
+.dropdownItem:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.loginButton {
+    background-color: white;
+    color: black;
+    border: none;
+    padding: 12px 32px;
+    border-radius: 500px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.loginButton:hover {
+    transform: scale(1.04);
 }
 
 .logoutContainer {

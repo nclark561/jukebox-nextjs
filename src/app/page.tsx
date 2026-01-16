@@ -6,7 +6,7 @@ import styles from "./page.module.css";
 import Image from "next/image";
 import Remote from "./remote";
 // import Search from "./search";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import Link from "next/link";
 import { io } from "socket.io-client";
 
@@ -27,6 +27,8 @@ export default function Home() {
   const [playlistsInfo, setPlaylistsInfo] = useState<
     { id: string; name: string }[]
   >([]);
+  const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   // const { images, loading } = useGetPlaylistImages(userPlaylists.map((item) => item.id))
 
   useEffect(() => {
@@ -45,6 +47,18 @@ export default function Home() {
         }
       );
     }
+  }, []);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
   socket.on("connect", () => {
     console.log(socket.id);
@@ -197,40 +211,69 @@ export default function Home() {
     // Math.round(seconds)
     return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
   }
-  // console.log(playlistImages[0], "this is a good test ")
+
 
   return (
     <main className={styles.main}>
-      <div style={{ display: "flex", width: "100vw", height: "88vh" }}>
-        <Queue icon={true} setSearchToggle={setSearchToggle} queue={queue} setQueue={setQueue} socket={socket} />
+      <div style={{ display: "flex", width: "100vw", height: "calc(100vh - 90px)", gap: "8px" }}>
+        <Queue icon={false} setSearchToggle={setSearchToggle} queue={queue} setQueue={setQueue} socket={socket} setResults={setResults} />
         <div className={styles.content}>
-          <div className={styles.logoutContainer}>
-            <div>
-              {session && (
-                <div>                  
-                  {session?.status === "authenticated" ? <button onClick={() => signOut()} className={styles.logout}>Logout</button> : <button onClick={() => signIn("spotify", { callbackUrl: "/" })}>Login</button>}
-                </div>
-              )}
-            </div>
-            <form className={styles.row} onSubmit={(evt) => {
+          <div className={styles.topBar}>
+            <div className={styles.logo}>Jukify</div>
+
+            <form className={styles.searchBar} onSubmit={(evt) => {
               evt.preventDefault()
               songSearch()
             }}>
-
-              {searchToggle ? <> <div className={styles.searchInput}>
-                <Image alt={"something"} onClick={() => {
-                  songSearch()
-                }} src={'/search.png'} style={{ position: "absolute", marginTop: "16px", marginLeft: "10px" }} height={18} width={18}></Image>
-                <input onClick={() => {
-
-                }} placeholder="What do you want to listen to?" value={txt} className={styles.input} onChange={(event) => {
+              <Image
+                alt="search"
+                onClick={songSearch}
+                src={'/search.png'}
+                className={styles.searchIcon}
+                height={18}
+                width={18}
+              />
+              <input
+                placeholder="What do you want to listen to?"
+                value={txt}
+                className={styles.searchBarInput}
+                onChange={(event) => {
                   setTxt(event.target.value)
                   setSearch(event?.target.value)
-                }} type="text" />
-              </div>
-              </> : <div className={styles.title}>Welcome to <div style={{ paddingLeft: "10px", color: "green", fontWeight: "700" }}>Jukify</div><div style={{ paddingLeft: "10px" }}>{displayName}</div></div>}
-
+                }}
+                type="text"
+              />
             </form>
+
+            <div className={styles.userMenu}>
+              {session && (
+                <>
+                  {session?.status === "authenticated" ? (
+                    <div className={styles.dropdown} ref={dropdownRef}>
+                      <button
+                        onClick={() => setDropdownOpen(!dropdownOpen)}
+                        className={styles.userButton}
+                      >
+                        {profilePic ? (
+                          <Image src={profilePic} alt="profile" width={32} height={32} className={styles.profilePic} />
+                        ) : (
+                          <div className={styles.profileIcon}>{displayName?.charAt(0) || 'U'}</div>
+                        )}
+                      </button>
+                      {dropdownOpen && (
+                        <div className={styles.dropdownMenu}>
+                          <button onClick={() => signOut()} className={styles.dropdownItem}>
+                            Logout
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <button onClick={() => signIn("spotify", { callbackUrl: "/" })} className={styles.loginButton}>Login</button>
+                  )}
+                </>
+              )}
+            </div>
           </div>
           <div className={styles.line}></div>
 

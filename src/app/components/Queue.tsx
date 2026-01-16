@@ -13,6 +13,7 @@ interface QueueProps {
   icon: boolean
   setQueue: React.Dispatch<React.SetStateAction<QueueTrack[]>>
   socket: any
+  setResults?: any
 }
 
 export default function Queue(props: QueueProps) {
@@ -43,6 +44,9 @@ export default function Queue(props: QueueProps) {
           <Link href={'/'}>
             <div onClick={() => {
               props.setSearchToggle(false)
+              if (props.setResults) {
+                props.setResults(undefined)
+              }
             }} className={styles.link}>Home</div>
           </Link>
         </div>
