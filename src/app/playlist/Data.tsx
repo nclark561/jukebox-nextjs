@@ -2,6 +2,7 @@
 import { signOut, useSession, signIn } from "next-auth/react";
 import { Track, Playlist } from "@spotify/web-api-ts-sdk";
 import Queue from "../components/Queue";
+import Header from "../components/Header";
 import styles from '../page.module.css'
 import Remote from "../remote";
 import Image from "next/image";
@@ -184,10 +185,8 @@ export default function Home() {
             <div style={{ display: "flex", width: "100vw", height: "88vh" }}>
                 <Queue icon={false} setSearchToggle={setSearchToggle} queue={queue} socket={socket} setQueue={setQueue} />
                 <div className={styles.content}>
-                    <form className={styles.row} onSubmit={(evt) => {
-                        evt.preventDefault()
-                        handleClick()
-                    }}>
+                    <Header showSearchBar={false} />
+                    <div className={styles.row}>
                         <div className={styles.searchInput}>
                             {image && <Image style={{ paddingBottom: "30px", marginLeft: "50px" }} priority src={image} alt={''} height={250} width={250}></Image>}
                             <div className={styles.even}>
@@ -198,20 +197,13 @@ export default function Home() {
                                 </div>
                             </div>
                         </div>
-                        <div style={{display:"flex", alignItems:"center", height:"40%"}}>
-                            {session && (
-                                <div>
-                                    {session?.status === "authenticated" ? <button onClick={() => signOut()} className={styles.logout} style={{ width: "100%", textAlign: "end" }}>logout</button> : <button className={styles.logout} onClick={() => signIn("spotify", { callbackUrl: "/" })}>Login</button>}
-                                </div>
-                            )}
-                        </div>
-                    </form>
-                    <div className={styles.topRow}>
-                        <div>Title</div>
-                        <div></div>
-                        <div>Album</div>
-                        <div></div>
-                        <div></div>
+                    </div>
+                    <div className={styles.headerRow}>
+                        <div>#</div>
+                        <div style={{ width: "255px", textAlign: "left" }}>Title</div>
+                        <div style={{ width: "175px", textAlign: "left" }}>Album</div>
+                        <div style={{ width: "175px" }}></div>
+                        <div style={{ width: "15px" }}></div>
                     </div>
                     <div className={styles.line}></div>
                     <div style={{ overflowY: "auto", height: "100vh", paddingBottom:"100px" }}>
@@ -224,11 +216,11 @@ export default function Home() {
                                     <div className={styles.rowGap}>
                                         <Image alt={"something"} src={item.track.album.images[1].url} height={70} width={70}></Image>
                                         <div style={{ padding: "10px" }} className={styles.column}>
-                                            <div style={{ width: "175px" }}>{item.track.name}</div>
+                                            <div style={{ width: "175px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{item.track.name}</div>
                                             <div className={styles.miniTitle}>{item.track.artists[0].name}</div>
                                         </div>
                                     </div>
-                                    <div style={{ width: "175px" }}>{item.track.album.name}</div>
+                                    <div style={{ width: "175px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{item.track.album.name}</div>
                                     <div style={{ width: "175px" }}>{millisToMinutesAndSeconds(item.track.duration_ms)}</div>
                                     <Image onClick={() => addSong(item.track)} alt={"plus sign"} height={15} width={15} src={'/plus.png'}></Image>
 

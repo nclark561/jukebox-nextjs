@@ -2,6 +2,7 @@
 import { signOut, useSession, signIn } from "next-auth/react";
 import { Track, Playlist } from "@spotify/web-api-ts-sdk";
 import Queue from "./components/Queue";
+import Header from "./components/Header";
 import styles from "./page.module.css";
 import Image from "next/image";
 import Remote from "./remote";
@@ -27,8 +28,6 @@ export default function Home() {
   const [playlistsInfo, setPlaylistsInfo] = useState<
     { id: string; name: string }[]
   >([]);
-  const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
   // const { images, loading } = useGetPlaylistImages(userPlaylists.map((item) => item.id))
 
   useEffect(() => {
@@ -49,17 +48,6 @@ export default function Home() {
     }
   }, []);
 
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setDropdownOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
   socket.on("connect", () => {
     console.log(socket.id);
   });
@@ -83,13 +71,6 @@ export default function Home() {
     );
   };
   const session = useSession();
-  let profilePic: string | undefined;
-  if (session.data?.user) {
-    if ("picture" in session.data.user) {
-      const { picture }: any = session.data.user;
-      profilePic = picture;
-    }
-  }
 
   const playlistImages = useMemo(async () => {
     if (playlistsInfo.length > 0) {
@@ -163,7 +144,6 @@ export default function Home() {
             .json()
             .catch((err) => console.error(err));
           setSpotifyUserId(spotifyInformation.id);
-          setDisplayName(spotifyInformation.display_name)
         }
       };
 
@@ -218,63 +198,15 @@ export default function Home() {
       <div style={{ display: "flex", width: "100vw", height: "calc(100vh - 90px)", gap: "8px" }}>
         <Queue icon={false} setSearchToggle={setSearchToggle} queue={queue} setQueue={setQueue} socket={socket} setResults={setResults} />
         <div className={styles.content}>
-          <div className={styles.topBar}>
-            <div className={styles.logo}>Jukify</div>
-
-            <form className={styles.searchBar} onSubmit={(evt) => {
-              evt.preventDefault()
-              songSearch()
-            }}>
-              <Image
-                alt="search"
-                onClick={songSearch}
-                src={'/search.png'}
-                className={styles.searchIcon}
-                height={18}
-                width={18}
-              />
-              <input
-                placeholder="What do you want to listen to?"
-                value={txt}
-                className={styles.searchBarInput}
-                onChange={(event) => {
-                  setTxt(event.target.value)
-                  setSearch(event?.target.value)
-                }}
-                type="text"
-              />
-            </form>
-
-            <div className={styles.userMenu}>
-              {session && (
-                <>
-                  {session?.status === "authenticated" ? (
-                    <div className={styles.dropdown} ref={dropdownRef}>
-                      <button
-                        onClick={() => setDropdownOpen(!dropdownOpen)}
-                        className={styles.userButton}
-                      >
-                        {profilePic ? (
-                          <Image src={profilePic} alt="profile" width={32} height={32} className={styles.profilePic} />
-                        ) : (
-                          <div className={styles.profileIcon}>{displayName?.charAt(0) || 'U'}</div>
-                        )}
-                      </button>
-                      {dropdownOpen && (
-                        <div className={styles.dropdownMenu}>
-                          <button onClick={() => signOut()} className={styles.dropdownItem}>
-                            Logout
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    <button onClick={() => signIn("spotify", { callbackUrl: "/" })} className={styles.loginButton}>Login</button>
-                  )}
-                </>
-              )}
-            </div>
-          </div>
+          <Header
+            showSearchBar={true}
+            searchValue={txt}
+            onSearchChange={(value) => {
+              setTxt(value);
+              setSearch(value);
+            }}
+            onSearchSubmit={songSearch}
+          />
           <div className={styles.line}></div>
 
           {results ? (
@@ -286,8 +218,8 @@ export default function Home() {
                     <div>{index + 1}</div>
                     <div className={styles.rowGap}>
                       <Image alt={"something"} src={item.album.images[1].url} height={30} width={70}></Image>
-                      <div style={{ padding: "10px" }} className={styles.column}>
-                        <div className={styles.songTitleSmall}>{item.name}</div>
+                      <div style={{ padding: "10px", display: "flex", flexDirection: "column", justifyContent: "space-evenly", height: "80px" }}>
+                        <div style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", width: "150px", fontSize: "14px", fontWeight: 400, letterSpacing: "1.5px" }}>{item.name}</div>
                         <div className={styles.miniTitle}>
                           {item.artists[0].name}
                         </div>
